@@ -36,8 +36,6 @@
 
 本專案採用 .NET (WPF) 開發，並遵循分層架構 (Layered Architecture) 設計，確保程式碼的可維護性與擴充性：
 
-<<<<<<< HEAD
-
 - **SubtitleGuardian.App**: WPF 使用者介面層 (MVVM Pattern) - Windows。
 - # **SubtitleGuardian.Mac**: Avalonia 使用者介面層 - macOS。
 - **SubtitleGuardian.App**: WPF 使用者介面層 (MVVM Pattern)。
@@ -86,7 +84,6 @@
 3. # **執行**: 從應用程式資料夾啟動 `Subtitle Guardian`。
 4. **執行**: 啟動 `SubtitleGuardian.App.exe` (或從開始選單開啟)。
 5. **轉錄**: 切換至「ASR」分頁，拖曳您的媒體檔案，選擇語言與模型，設定每句字數限制，點擊「開始轉錄」。
-   > > > > > > > 3e26a0d6bdcd0ce7d55b865fdfc73997162b9423
 6. **對齊**: 若已有文稿，切換至「Alignment」分頁，分別匯入音訊與文字檔，點擊「開始匹配」。
 
 ## 🤝 參與開發
