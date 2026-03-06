@@ -39,19 +39,12 @@
 - **SubtitleGuardian.App**: WPF 使用者介面層 (MVVM Pattern) - Windows。
 - # **SubtitleGuardian.Mac**: Avalonia 使用者介面層 - macOS。
 - **SubtitleGuardian.App**: WPF 使用者介面層 (MVVM Pattern)。
-  > > > > > > > 3e26a0d6bdcd0ce7d55b865fdfc73997162b9423
 - **SubtitleGuardian.Application**: 應用程式邏輯層 (Use Cases, Services)。
 - **SubtitleGuardian.Domain**: 領域模型與介面定義 (Core Business Logic)。
 - **SubtitleGuardian.Infrastructure**: 基礎設施層 (檔案系統存取、外部服務整合)。
 - **SubtitleGuardian.Engines**: ASR 引擎實作 (整合 Whisper.cpp)。
 
 ## 💻 系統需求
-
-### Windows
-
-- **作業系統**: Windows 10 / 11 (64-bit)
-  <<<<<<< HEAD
-- **Runtime**: .NET Runtime 10
 
 ### macOS
 
@@ -62,7 +55,6 @@
 - **硬體建議**:
   - 建議配備支援 CUDA 的 NVIDIA 獨立顯示卡，以獲得最佳的 Whisper 模型推論速度。
   - 較大的模型 (如 Medium, Large) 需要較多的系統記憶體 (RAM) 與 VRAM。
-    > > > > > > > 3e26a0d6bdcd0ce7d55b865fdfc73997162b9423
 
 ## 🚀 快速開始
 
