@@ -1,0 +1,17 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Omamori Shape -->
+  <path d="M128 128 L256 32 L384 128 V416 C384 433.673 369.673 448 352 448 H160 C142.327 448 128 433.673 128 416 V128 Z" fill="#E63946" stroke="#1D3557" stroke-width="16"/>
+  
+  <!-- Knot/Loop -->
+  <circle cx="256" cy="80" r="24" fill="#F1FAEE" stroke="#1D3557" stroke-width="8"/>
+  <path d="M256 104 V160" stroke="#F1FAEE" stroke-width="8" stroke-linecap="round"/>
+  
+  <!-- Decorative Pattern -->
+  <rect x="160" y="160" width="192" height="256" rx="16" fill="#F1FAEE" fill-opacity="0.2"/>
+  
+  <!-- Text "守" -->
+  <text x="256" y="320" font-family="Arial, sans-serif" font-size="160" font-weight="bold" fill="#F1FAEE" text-anchor="middle" dominant-baseline="middle">守</text>
+  
+  <!-- "Subtitle Guardian" Text (Small) -->
+  <text x="256" y="400" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#1D3557" text-anchor="middle">字幕御守</text>
+</svg>

@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "6ApOZzRJ2J4=",
+  "success": true,
+  "projectFilePath": "/Users/hw/Desktop/Subtitle_Guardian_mac/tools/IconGen/IconGen.csproj",
+  "expectedPackageFiles": [
+    "/Users/hw/Desktop/Subtitle_Guardian_mac/.nuget/packages/skiasharp/3.119.2/skiasharp.3.119.2.nupkg.sha512",
+    "/Users/hw/Desktop/Subtitle_Guardian_mac/.nuget/packages/skiasharp.nativeassets.macos/3.119.2/skiasharp.nativeassets.macos.3.119.2.nupkg.sha512",
+    "/Users/hw/Desktop/Subtitle_Guardian_mac/.nuget/packages/skiasharp.nativeassets.win32/3.119.2/skiasharp.nativeassets.win32.3.119.2.nupkg.sha512"
+  ],
+  "logs": []
+}

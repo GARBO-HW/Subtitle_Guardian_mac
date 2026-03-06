@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "ZG4C8hBywm0=",
+  "success": true,
+  "projectFilePath": "/Users/hw/Desktop/Subtitle_Guardian_mac/src/SubtitleGuardian.Application/SubtitleGuardian.Application.csproj",
+  "expectedPackageFiles": [
+    "/Users/hw/Desktop/Subtitle_Guardian_mac/.nuget/packages/microsoft.netcore.app.runtime.osx-arm64/10.0.3/microsoft.netcore.app.runtime.osx-arm64.10.0.3.nupkg.sha512",
+    "/Users/hw/Desktop/Subtitle_Guardian_mac/.nuget/packages/microsoft.aspnetcore.app.runtime.osx-arm64/10.0.3/microsoft.aspnetcore.app.runtime.osx-arm64.10.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}

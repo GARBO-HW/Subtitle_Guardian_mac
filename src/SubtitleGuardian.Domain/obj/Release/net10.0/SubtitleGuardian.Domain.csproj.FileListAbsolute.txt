@@ -1,0 +1,12 @@
+/Users/hw/Desktop/Subtitle_Guardian_mac/src/SubtitleGuardian.Domain/bin/Release/net10.0/SubtitleGuardian.Domain.deps.json
+/Users/hw/Desktop/Subtitle_Guardian_mac/src/SubtitleGuardian.Domain/bin/Release/net10.0/SubtitleGuardian.Domain.dll
+/Users/hw/Desktop/Subtitle_Guardian_mac/src/SubtitleGuardian.Domain/bin/Release/net10.0/SubtitleGuardian.Domain.pdb
+/Users/hw/Desktop/Subtitle_Guardian_mac/src/SubtitleGuardian.Domain/obj/Release/net10.0/SubtitleGuardian.Domain.GeneratedMSBuildEditorConfig.editorconfig
+/Users/hw/Desktop/Subtitle_Guardian_mac/src/SubtitleGuardian.Domain/obj/Release/net10.0/SubtitleGuardian.Domain.AssemblyInfoInputs.cache
+/Users/hw/Desktop/Subtitle_Guardian_mac/src/SubtitleGuardian.Domain/obj/Release/net10.0/SubtitleGuardian.Domain.AssemblyInfo.cs
+/Users/hw/Desktop/Subtitle_Guardian_mac/src/SubtitleGuardian.Domain/obj/Release/net10.0/SubtitleGuardian.Domain.csproj.CoreCompileInputs.cache
+/Users/hw/Desktop/Subtitle_Guardian_mac/src/SubtitleGuardian.Domain/obj/Release/net10.0/SubtitleGuardian.Domain.sourcelink.json
+/Users/hw/Desktop/Subtitle_Guardian_mac/src/SubtitleGuardian.Domain/obj/Release/net10.0/SubtitleGuardian.Domain.dll
+/Users/hw/Desktop/Subtitle_Guardian_mac/src/SubtitleGuardian.Domain/obj/Release/net10.0/refint/SubtitleGuardian.Domain.dll
+/Users/hw/Desktop/Subtitle_Guardian_mac/src/SubtitleGuardian.Domain/obj/Release/net10.0/SubtitleGuardian.Domain.pdb
+/Users/hw/Desktop/Subtitle_Guardian_mac/src/SubtitleGuardian.Domain/obj/Release/net10.0/ref/SubtitleGuardian.Domain.dll

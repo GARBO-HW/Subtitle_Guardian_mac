@@ -1,0 +1,69 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SubtitleGuardian.Mac.Views.SrtToTxtPage">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Input File Selection -->
+        <Grid Grid.Row="0" Margin="0,0,0,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="SRT 檔案" VerticalAlignment="Center" Margin="0,0,10,0" />
+            <TextBox x:Name="InputFilePath" Grid.Column="1" Margin="0,0,10,0" Watermark="請選擇 SRT 檔案..." 
+                     DragDrop.AllowDrop="True" />
+            <Button x:Name="SelectFileButton" Grid.Column="2" Content="選取檔案" Click="OnSelectFile" Margin="0,0,5,0" />
+            <Button x:Name="ClearButton" Grid.Column="3" Content="清除" Click="OnClear" />
+        </Grid>
+
+        <!-- Main Content Area -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Left: SRT Input -->
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <TextBlock Text="SRT 內容 (可直接貼上)" Margin="0,0,0,5" />
+                <TextBox x:Name="SrtInputBox" Grid.Row="1" AcceptsReturn="True" TextWrapping="Wrap" />
+            </Grid>
+
+            <!-- Middle: Convert Button -->
+            <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="10">
+                <Button x:Name="ConvertButton" Content="轉換 >>" Click="OnConvert" />
+            </StackPanel>
+
+            <!-- Right: TXT Output -->
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <TextBlock Text="TXT 結果" Margin="0,0,0,5" />
+                <TextBox x:Name="TxtOutputBox" Grid.Row="1" AcceptsReturn="True" TextWrapping="Wrap" IsReadOnly="False" />
+            </Grid>
+        </Grid>
+
+        <!-- Bottom Actions -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+            <Button x:Name="CopyResultButton" Content="複製結果" Click="OnCopyResult" Margin="0,0,10,0" />
+            <Button x:Name="SaveTxtButton" Content="匯出 TXT" Click="OnSaveTxt" />
+        </StackPanel>
+    </Grid>
+</UserControl>

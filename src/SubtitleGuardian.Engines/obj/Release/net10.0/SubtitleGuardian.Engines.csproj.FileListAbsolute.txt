@@ -1,0 +1,16 @@
+/Users/hw/Desktop/Subtitle_Guardian_mac/src/SubtitleGuardian.Engines/bin/Release/net10.0/SubtitleGuardian.Engines.deps.json
+/Users/hw/Desktop/Subtitle_Guardian_mac/src/SubtitleGuardian.Engines/bin/Release/net10.0/SubtitleGuardian.Engines.dll
+/Users/hw/Desktop/Subtitle_Guardian_mac/src/SubtitleGuardian.Engines/bin/Release/net10.0/SubtitleGuardian.Engines.pdb
+/Users/hw/Desktop/Subtitle_Guardian_mac/src/SubtitleGuardian.Engines/bin/Release/net10.0/SubtitleGuardian.Domain.dll
+/Users/hw/Desktop/Subtitle_Guardian_mac/src/SubtitleGuardian.Engines/bin/Release/net10.0/SubtitleGuardian.Domain.pdb
+/Users/hw/Desktop/Subtitle_Guardian_mac/src/SubtitleGuardian.Engines/obj/Release/net10.0/SubtitleGuardian.Engines.csproj.AssemblyReference.cache
+/Users/hw/Desktop/Subtitle_Guardian_mac/src/SubtitleGuardian.Engines/obj/Release/net10.0/SubtitleGuardian.Engines.GeneratedMSBuildEditorConfig.editorconfig
+/Users/hw/Desktop/Subtitle_Guardian_mac/src/SubtitleGuardian.Engines/obj/Release/net10.0/SubtitleGuardian.Engines.AssemblyInfoInputs.cache
+/Users/hw/Desktop/Subtitle_Guardian_mac/src/SubtitleGuardian.Engines/obj/Release/net10.0/SubtitleGuardian.Engines.AssemblyInfo.cs
+/Users/hw/Desktop/Subtitle_Guardian_mac/src/SubtitleGuardian.Engines/obj/Release/net10.0/SubtitleGuardian.Engines.csproj.CoreCompileInputs.cache
+/Users/hw/Desktop/Subtitle_Guardian_mac/src/SubtitleGuardian.Engines/obj/Release/net10.0/SubtitleGuardian.Engines.sourcelink.json
+/Users/hw/Desktop/Subtitle_Guardian_mac/src/SubtitleGuardian.Engines/obj/Release/net10.0/Subtitle.0FD2AC9B.Up2Date
+/Users/hw/Desktop/Subtitle_Guardian_mac/src/SubtitleGuardian.Engines/obj/Release/net10.0/SubtitleGuardian.Engines.dll
+/Users/hw/Desktop/Subtitle_Guardian_mac/src/SubtitleGuardian.Engines/obj/Release/net10.0/refint/SubtitleGuardian.Engines.dll
+/Users/hw/Desktop/Subtitle_Guardian_mac/src/SubtitleGuardian.Engines/obj/Release/net10.0/SubtitleGuardian.Engines.pdb
+/Users/hw/Desktop/Subtitle_Guardian_mac/src/SubtitleGuardian.Engines/obj/Release/net10.0/ref/SubtitleGuardian.Engines.dll
