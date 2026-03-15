@@ -65,10 +65,28 @@ public sealed class AppPaths
             return (env, env);
         }
 
-        // Check for portable data folder next to executable
-        string portable = Path.Combine(AppContext.BaseDirectory, ".subtitleguardian");
+        // Check for portable data folder next to executable (or Mac Bundle)
+        string baseDir = AppContext.BaseDirectory;
+
+        // Mac Bundle support: Check for subtitleguardian_libs in MacOS folder (unhidden)
+        string macLibs = Path.Combine(baseDir, "subtitleguardian_libs");
+        if (Directory.Exists(macLibs))
+        {
+             // InstallRoot is read-only in bundle
+             // UserRoot must be writable in AppData
+             string local = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                appName
+             );
+             try { Directory.CreateDirectory(local); } catch {}
+             return (macLibs, local);
+        }
+
+        string portable = Path.Combine(baseDir, ".subtitleguardian");
         if (Directory.Exists(portable))
         {
+            // If portable dir exists but is read-only (e.g. in Program Files or DMG),
+            // use it as InstallRoot but use AppData for UserRoot (writable)
             if (IsDirectoryWritable(portable))
             {
                 // True Portable Mode (USB)
@@ -76,11 +94,13 @@ public sealed class AppPaths
             }
             else
             {
-                // Read-only Portable (Program Files)
+                // Read-only Portable (Program Files / Mac DMG)
                 string local = Path.Combine(
                     Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                     appName
                 );
+                // Ensure local exists
+                try { Directory.CreateDirectory(local); } catch {}
                 return (portable, local);
             }
         }

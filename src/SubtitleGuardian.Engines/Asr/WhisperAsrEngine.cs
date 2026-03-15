@@ -186,7 +186,14 @@ public sealed class WhisperAsrEngine : IAsrEngine
     private string ResolveExecutablePath()
     {
         var baseDir = AppContext.BaseDirectory;
-        var runtimeDir = Path.Combine(baseDir, ".subtitleguardian", "runtime", "whispercpp", "bin");
+        // Try new path first (subtitleguardian_libs)
+        var runtimeDir = Path.Combine(baseDir, "subtitleguardian_libs", "runtime", "whispercpp", "bin");
+        
+        if (!Directory.Exists(runtimeDir))
+        {
+            // Fallback to old path (.subtitleguardian)
+            runtimeDir = Path.Combine(baseDir, ".subtitleguardian", "runtime", "whispercpp", "bin");
+        }
 
         // Check for 'whisper-cli' (Mac/Linux) or 'whisper-cli.exe' (Windows)
         // Also check 'main' as fallback
@@ -209,7 +216,12 @@ public sealed class WhisperAsrEngine : IAsrEngine
     private string ResolveModelPath(TranscribeOptions options)
     {
         var baseDir = AppContext.BaseDirectory;
-        var modelRoot = Path.Combine(baseDir, ".subtitleguardian", "models", "whisper");
+        var modelRoot = Path.Combine(baseDir, "subtitleguardian_libs", "models", "whisper");
+        
+        if (!Directory.Exists(modelRoot))
+        {
+            modelRoot = Path.Combine(baseDir, ".subtitleguardian", "models", "whisper");
+        }
 
         if (!Directory.Exists(modelRoot))
         {

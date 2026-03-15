@@ -51,63 +51,58 @@ class Program
 
     static void GenerateDmgBackground()
     {
-        int width = 600;
-        int height = 400;
-        
-        using var bitmap = new SKBitmap(width, height);
-        using var canvas = new SKCanvas(bitmap);
-        
-        // Background color (Dark Gray like Finder Dark Mode or just a nice neutral)
-        canvas.Clear(SKColor.Parse("#1E1E1E"));
-        
-        // Draw Arrow (Smaller)
-        var arrowPaint = new SKPaint 
-        { 
-            Color = SKColor.Parse("#F1FAEE"), // White/Off-white
-            Style = SKPaintStyle.Stroke, 
-            StrokeWidth = 6, // Thinner stroke
-            IsAntialias = true,
-            StrokeCap = SKStrokeCap.Round,
-            StrokeJoin = SKStrokeJoin.Round
-        };
-        
-        // Arrow path - shorter
-        // Center is (300, 200)
-        // Original: 240->360 (120px). New: 270->330 (60px)
-        var path = new SKPath();
-        path.MoveTo(270, 200);
-        path.LineTo(330, 200);
-        
-        // Arrow head - smaller
-        path.MoveTo(310, 180);
-        path.LineTo(330, 200);
-        path.LineTo(310, 220);
-        
-        canvas.DrawPath(path, arrowPaint);
-        
-        // Optional: Text "Drag to Applications"
-        var textPaint = new SKPaint 
-        { 
-            Color = SKColor.Parse("#F1FAEE"), 
-            IsAntialias = true, 
-            TextAlign = SKTextAlign.Center,
-            TextSize = 14, // Smaller text
-            Typeface = SKTypeface.FromFamilyName("Arial", SKFontStyle.Bold)
-        };
-        
-        // Draw text below arrow
-        // Note: SKCanvas.DrawText(string, float, float, SKPaint) is obsolete but still works in this version.
-        // We can use the newer API or just suppress warning.
-        // For simplicity in this quick tool, we use the simple one.
-        canvas.DrawText("Drag to Applications", 300, 240, textPaint);
-        
-        using var image = SKImage.FromBitmap(bitmap);
-        using var data = image.Encode(SKEncodedImageFormat.Png, 100);
-        
-        string filename = "dmg_background.png";
-        using var stream = File.OpenWrite(filename);
-        data.SaveTo(stream);
-        Console.WriteLine($"Generated {filename}");
+        // Wider canvas to avoid overlapping: 750x450
+        // Center X = 375, Center Y = 225
+        using (var surface = SKSurface.Create(new SKImageInfo(750, 450)))
+        {
+            var canvas = surface.Canvas;
+            canvas.Clear(SKColor.Parse("#1E1E1E")); // Dark Gray
+
+            var arrowPaint = new SKPaint
+            {
+                Color = SKColor.Parse("#FFFFFF"), // Pure White
+                IsAntialias = true,
+                StrokeWidth = 8, // Thicker arrow
+                Style = SKPaintStyle.Stroke,
+                StrokeCap = SKStrokeCap.Round
+            };
+
+            // Arrow path - center horizontally
+            // Start X: 300, End X: 450 (150px length)
+            // Center Y: 180 (Above icon center line)
+            var path = new SKPath();
+            path.MoveTo(300, 180);
+            path.LineTo(450, 180);
+            
+            // Arrow head
+            path.MoveTo(420, 150);
+            path.LineTo(450, 180);
+            path.LineTo(420, 210);
+            
+            canvas.DrawPath(path, arrowPaint);
+
+            // Text "Drag to Applications"
+            var textPaint = new SKPaint 
+            { 
+                Color = SKColor.Parse("#FFFFFF"), // Pure White
+                IsAntialias = true, 
+                TextAlign = SKTextAlign.Center,
+                TextSize = 20, 
+                Typeface = SKTypeface.FromFamilyName("Arial", SKFontStyle.Bold)
+            };
+            
+            // Draw text below arrow
+            // Y position: 240
+            canvas.DrawText("Drag to Applications", 375, 240, textPaint);
+
+            using (var image = surface.Snapshot())
+            using (var data = image.Encode(SKEncodedImageFormat.Png, 100))
+            using (var stream = File.OpenWrite("dmg_background.png"))
+            {
+                data.SaveTo(stream);
+            }
+        }
+        Console.WriteLine("Generated dmg_background.png");
     }
 
     static void GenerateIconSet(string outputDir)

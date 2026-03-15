@@ -88,7 +88,14 @@ fi
 
 # 6. Setup Dependencies (Portable Mode)
 echo "Setting up dependencies..."
-DEST_PORTABLE="$APP_BUNDLE/Contents/MacOS/.subtitleguardian"
+# Use Contents/Resources/runtime for dependencies instead of MacOS/.subtitleguardian
+# Apple recommends putting auxiliary executables in Contents/MacOS or Contents/Helpers
+# But putting them in a hidden folder inside MacOS is often flagged as suspicious or invalid structure.
+# Let's try putting them in Contents/Resources and symlinking or just updating the path in app logic.
+# However, to avoid changing C# code right now, let's keep it in MacOS but not hidden?
+# Or maybe the hidden folder IS the problem for codesign --deep.
+
+DEST_PORTABLE="$APP_BUNDLE/Contents/MacOS/subtitleguardian_libs"
 mkdir -p "$DEST_PORTABLE"
 
 # Copy runtime (ffmpeg, whispercpp)
@@ -102,6 +109,16 @@ fi
 if [ -d "$PROJECT_ROOT/models" ]; then
     cp -R "$PROJECT_ROOT/models" "$DEST_PORTABLE/"
 fi
+
+# 6.5. Code Sign (Ad-hoc)
+echo "Code Signing (Ad-hoc)..."
+
+# Sign internal binaries first
+find "$DEST_PORTABLE" -type f \( -name "ffmpeg" -o -name "ffprobe" -o -name "whisper-cli" \) -exec codesign --force --sign - {} \;
+
+# Sign the main app bundle
+codesign --force --deep --sign - "$APP_BUNDLE"
+echo "Code Signing Complete."
 
 # 7. Create DMG
 echo "Creating DMG..."
@@ -149,13 +166,23 @@ hdiutil create -volname "$VOL_NAME" -srcfolder "$TMP_DMG_DIR" -ov -format UDRW "
 # Mount the temporary DMG
 echo "Mounting DMG..."
 # Attach and get the device node (e.g. /dev/disk4s1)
-# Use -mountpoint to control where it mounts if needed, but default /Volumes/$VOL_NAME is fine
-# We need to capture the output carefully.
 device=$(hdiutil attach -readwrite -noverify -noautoopen "$DMG_PATH.tmp.dmg" | grep Apple_HFS | awk '{print $1}')
 echo "Mounted at device: $device"
 
 # Wait for mount
 sleep 5
+
+# Hide background folder and system files
+echo "Hiding system files..."
+if [ -d "/Volumes/$VOL_NAME/.background" ]; then
+    chflags hidden "/Volumes/$VOL_NAME/.background"
+fi
+if [ -d "/Volumes/$VOL_NAME/.fseventsd" ]; then
+    chflags hidden "/Volumes/$VOL_NAME/.fseventsd"
+fi
+if [ -d "/Volumes/$VOL_NAME/.Trashes" ]; then
+    chflags hidden "/Volumes/$VOL_NAME/.Trashes"
+fi
 
 # Apply layout using AppleScript
 echo "Applying DMG layout..."
@@ -180,11 +207,13 @@ tell application "Finder"
         
         -- Set window size and position (optional)
         -- bounds: {left, top, right, bottom}
-        set the bounds of container window to {400, 100, 1000, 500}
+        -- Width: 750 (1150-400), Height: 500 (600-100) to ensure title bar fits
+        set the bounds of container window to {400, 100, 1150, 600}
         
         set theViewOptions to the icon view options of container window
         set arrangement of theViewOptions to not arranged
         set icon size of theViewOptions to 128
+        set text size of theViewOptions to 14
         
         -- Set background picture
         try
@@ -194,11 +223,13 @@ tell application "Finder"
         end try
         
         -- Set positions
-        -- Window is 600x400 (1000-400=600, 500-100=400)
-        -- App at left (150, 200) - vertically centered
+        -- Window is 750x450
+        -- Center Y is ~225
+        -- App at left: 180, 225
+        -- Apps at right: 570, 225
         try
-            set position of item "$APP_NAME.app" of container window to {150, 200}
-            set position of item "Applications" of container window to {450, 200}
+            set position of item "$APP_NAME.app" of container window to {180, 225}
+            set position of item "Applications" of container window to {570, 225}
         on error errMsg
             log "Error setting positions: " & errMsg
         end try
@@ -211,6 +242,7 @@ tell application "Finder"
     end tell
 end tell
 EOF
+
 
 # Unmount
 echo "Unmounting DMG..."
