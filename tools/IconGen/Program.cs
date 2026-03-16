@@ -1,5 +1,6 @@
 using SkiaSharp;
 using System.IO;
+using System.Reflection;
 
 class Program
 {

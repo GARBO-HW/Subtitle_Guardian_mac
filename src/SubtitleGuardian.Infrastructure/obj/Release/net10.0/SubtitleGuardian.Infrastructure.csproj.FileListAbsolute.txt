@@ -1,3 +1,4 @@
+/Users/hw/Desktop/Subtitle_Guardian_mac/src/SubtitleGuardian.Infrastructure/bin/Release/net10.0/whisper-cli
 /Users/hw/Desktop/Subtitle_Guardian_mac/src/SubtitleGuardian.Infrastructure/bin/Release/net10.0/SubtitleGuardian.Infrastructure.deps.json
 /Users/hw/Desktop/Subtitle_Guardian_mac/src/SubtitleGuardian.Infrastructure/bin/Release/net10.0/SubtitleGuardian.Infrastructure.dll
 /Users/hw/Desktop/Subtitle_Guardian_mac/src/SubtitleGuardian.Infrastructure/bin/Release/net10.0/SubtitleGuardian.Infrastructure.pdb

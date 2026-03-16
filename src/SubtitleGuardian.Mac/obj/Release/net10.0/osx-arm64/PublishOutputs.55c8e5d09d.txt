@@ -1,4 +1,5 @@
 /Users/hw/Desktop/Subtitle_Guardian_mac/src/SubtitleGuardian.Mac/bin/Release/net10.0/osx-arm64/publish/SubtitleGuardian.Mac
+/Users/hw/Desktop/Subtitle_Guardian_mac/src/SubtitleGuardian.Mac/bin/Release/net10.0/osx-arm64/publish/whisper-cli
 /Users/hw/Desktop/Subtitle_Guardian_mac/src/SubtitleGuardian.Mac/bin/Release/net10.0/osx-arm64/publish/SubtitleGuardian.Mac.dll
 /Users/hw/Desktop/Subtitle_Guardian_mac/src/SubtitleGuardian.Mac/bin/Release/net10.0/osx-arm64/publish/SubtitleGuardian.Mac.deps.json
 /Users/hw/Desktop/Subtitle_Guardian_mac/src/SubtitleGuardian.Mac/bin/Release/net10.0/osx-arm64/publish/SubtitleGuardian.Mac.runtimeconfig.json

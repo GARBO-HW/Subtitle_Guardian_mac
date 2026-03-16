@@ -60,21 +60,21 @@ cat > "$APP_BUNDLE/Contents/Info.plist" <<EOF
 <plist version="1.0">
 <dict>
     <key>CFBundleExecutable</key>
-    <string>$APP_NAME</string>
+    <string>Subtitle Guardian</string>
     <key>CFBundleIconFile</key>
     <string>AppIcon</string>
     <key>CFBundleIdentifier</key>
     <string>com.subtitleguardian.mac</string>
     <key>CFBundleName</key>
-    <string>$APP_NAME</string>
+    <string>Subtitle Guardian</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
-    <string>1.0</string>
+    <string>1.4</string>
     <key>CFBundleVersion</key>
-    <string>1</string>
+    <string>1.4.0</string>
     <key>LSMinimumSystemVersion</key>
-    <string>10.13</string>
+    <string>10.15</string>
     <key>NSHighResolutionCapable</key>
     <true/>
 </dict>
@@ -114,6 +114,7 @@ fi
 echo "Code Signing (Ad-hoc)..."
 
 # Sign internal binaries first
+find "$DEST_PORTABLE" -type f \( -name "ffmpeg" -o -name "ffprobe" -o -name "whisper-cli" \) -exec chmod +x {} \;
 find "$DEST_PORTABLE" -type f \( -name "ffmpeg" -o -name "ffprobe" -o -name "whisper-cli" \) -exec codesign --force --sign - {} \;
 
 # Sign the main app bundle
@@ -122,7 +123,7 @@ echo "Code Signing Complete."
 
 # 7. Create DMG
 echo "Creating DMG..."
-DMG_NAME="$APP_NAME.dmg"
+DMG_NAME="Subtitle Guardian v1.4.dmg"
 DMG_PATH="$OUTPUT_DIR/$DMG_NAME"
 VOL_NAME="$APP_NAME"
 TMP_DMG_DIR="$OUTPUT_DIR/dmg_tmp"
@@ -136,18 +137,19 @@ mkdir -p "$TMP_DMG_DIR"
 echo "Copying app to DMG staging..."
 cp -R "$APP_BUNDLE" "$TMP_DMG_DIR/"
 
-# Create Alias to Applications folder (instead of symlink to support custom icon)
-echo "Creating Applications alias..."
-# Use Swift script to create alias
-swift "$SCRIPT_DIR/create_alias.swift" "/Applications" "$TMP_DMG_DIR/Applications"
-
-# Set custom icon for Applications alias
+# Create Link to Applications folder
+echo "Creating Applications link..."
 APP_ICON_SRC="$PROJECT_ROOT/artifacts/mac/Applications.icns"
+
 if [ -f "$APP_ICON_SRC" ]; then
-    echo "Setting custom icon for Applications alias..."
+    # Create Alias to support custom icon
+    echo "Creating Alias and setting custom icon..."
+    swift "$SCRIPT_DIR/create_alias.swift" "/Applications" "$TMP_DMG_DIR/Applications"
     swift "$SCRIPT_DIR/set_icon.swift" "$APP_ICON_SRC" "$TMP_DMG_DIR/Applications"
 else
-    echo "Warning: Applications.icns not found at $APP_ICON_SRC"
+    # Fallback to Symlink (Standard system icon)
+    echo "Applications.icns not found. Using standard symlink."
+    ln -s /Applications "$TMP_DMG_DIR/Applications"
 fi
 
 # Copy background image if exists
@@ -175,13 +177,21 @@ sleep 5
 # Hide background folder and system files
 echo "Hiding system files..."
 if [ -d "/Volumes/$VOL_NAME/.background" ]; then
-    chflags hidden "/Volumes/$VOL_NAME/.background"
+    if command -v SetFile &> /dev/null; then
+        SetFile -a V "/Volumes/$VOL_NAME/.background"
+    fi
 fi
 if [ -d "/Volumes/$VOL_NAME/.fseventsd" ]; then
     chflags hidden "/Volumes/$VOL_NAME/.fseventsd"
+    if command -v SetFile &> /dev/null; then
+        SetFile -a V "/Volumes/$VOL_NAME/.fseventsd"
+    fi
 fi
 if [ -d "/Volumes/$VOL_NAME/.Trashes" ]; then
     chflags hidden "/Volumes/$VOL_NAME/.Trashes"
+    if command -v SetFile &> /dev/null; then
+        SetFile -a V "/Volumes/$VOL_NAME/.Trashes"
+    fi
 fi
 
 # Apply layout using AppleScript

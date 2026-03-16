@@ -1,3 +1,4 @@
+/Users/hw/Desktop/Subtitle_Guardian_mac/src/SubtitleGuardian.Mac/bin/Release/net10.0/osx-arm64/whisper-cli
 /Users/hw/Desktop/Subtitle_Guardian_mac/src/SubtitleGuardian.Mac/bin/Release/net10.0/osx-arm64/SubtitleGuardian.Mac
 /Users/hw/Desktop/Subtitle_Guardian_mac/src/SubtitleGuardian.Mac/bin/Release/net10.0/osx-arm64/SubtitleGuardian.Mac.deps.json
 /Users/hw/Desktop/Subtitle_Guardian_mac/src/SubtitleGuardian.Mac/bin/Release/net10.0/osx-arm64/SubtitleGuardian.Mac.runtimeconfig.json

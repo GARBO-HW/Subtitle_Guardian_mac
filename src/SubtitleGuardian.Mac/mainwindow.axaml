@@ -5,7 +5,7 @@
         xmlns:local="clr-namespace:SubtitleGuardian.Mac"
         mc:Ignorable="d" d:DesignWidth="1024" d:DesignHeight="800"
         x:Class="SubtitleGuardian.Mac.MainWindow"
-        Title="Subtitle Guardian (Mac)" Width="1024" Height="800"
+        Title="Subtitle Guardian (Mac) v1.4" Width="1024" Height="800"
         Icon="/Assets/SubtitleGuardianIcon.ico">
     <DockPanel Margin="16">
         <Grid DockPanel.Dock="Bottom" Height="200" Margin="0,10,0,0">

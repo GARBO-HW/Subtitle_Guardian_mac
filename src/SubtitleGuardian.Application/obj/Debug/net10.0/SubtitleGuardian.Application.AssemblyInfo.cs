@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SubtitleGuardian.Application")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f7e4061688ab6a32634f9fd4c9ccad028a9d797b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f5888697ad848875b673a111bb1cc0eef87040d6")]
 [assembly: System.Reflection.AssemblyProductAttribute("SubtitleGuardian.Application")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SubtitleGuardian.Application")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

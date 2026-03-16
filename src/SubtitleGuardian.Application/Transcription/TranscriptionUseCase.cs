@@ -35,7 +35,7 @@ public sealed class TranscriptionUseCase
         return id switch
         {
             AsrEngineId.Dummy => new DummyAsrEngine(),
-            AsrEngineId.Whisper => new WhisperCppCliAsrEngine(),
+            AsrEngineId.Whisper => new WhisperAsrEngine(),
             _ => throw new ArgumentOutOfRangeException(nameof(id), id, "unknown engine id")
         };
     }

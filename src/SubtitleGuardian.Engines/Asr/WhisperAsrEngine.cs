@@ -1,4 +1,6 @@
 using System.Diagnostics;
+using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
@@ -186,23 +188,23 @@ public sealed class WhisperAsrEngine : IAsrEngine
     private string ResolveExecutablePath()
     {
         var baseDir = AppContext.BaseDirectory;
-        // Try new path first (subtitleguardian_libs)
-        var runtimeDir = Path.Combine(baseDir, "subtitleguardian_libs", "runtime", "whispercpp", "bin");
-        
-        if (!Directory.Exists(runtimeDir))
+        if (string.IsNullOrEmpty(baseDir))
         {
-            // Fallback to old path (.subtitleguardian)
-            runtimeDir = Path.Combine(baseDir, ".subtitleguardian", "runtime", "whispercpp", "bin");
+            try {
+                baseDir = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule?.FileName) ?? ".";
+            } catch {}
         }
 
-        // Check for 'whisper-cli' (Mac/Linux) or 'whisper-cli.exe' (Windows)
-        // Also check 'main' as fallback
-        var candidates = new[]
+        // Direct path checks for common bundle structures
+        var candidates = new List<string>
         {
-            Path.Combine(runtimeDir, "whisper-cli"),
-            Path.Combine(runtimeDir, "whisper-cli.exe"),
-            Path.Combine(runtimeDir, "main"),
-            Path.Combine(runtimeDir, "main.exe")
+            Path.Combine(baseDir, "subtitleguardian_libs", "runtime", "whispercpp", "bin", "whisper-cli"),
+            Path.Combine(baseDir, ".subtitleguardian", "runtime", "whispercpp", "bin", "whisper-cli"),
+            Path.Combine(baseDir, "runtime", "whispercpp", "bin", "whisper-cli"),
+            Path.Combine(baseDir, "..", "runtime", "whispercpp", "bin", "whisper-cli"),
+            Path.Combine(baseDir, "subtitleguardian_libs", "runtime", "whispercpp", "bin", "whisper-cli.exe"),
+            Path.Combine(baseDir, "subtitleguardian_libs", "runtime", "whispercpp", "bin", "main"),
+            Path.Combine(baseDir, "subtitleguardian_libs", "runtime", "whispercpp", "bin", "main.exe")
         };
 
         foreach (var path in candidates)
@@ -210,7 +212,177 @@ public sealed class WhisperAsrEngine : IAsrEngine
             if (File.Exists(path)) return path;
         }
 
-        throw new FileNotFoundException($"Could not find whisper-cli executable in {runtimeDir}. Please run setup scripts.");
+        // Last resort: recursive search
+        try 
+        {
+            var searchRoots = new List<string> { baseDir };
+            var parent = Directory.GetParent(baseDir);
+            if (parent != null) searchRoots.Add(parent.FullName);
+
+            foreach (var root in searchRoots)
+            {
+                if (!Directory.Exists(root)) continue;
+                
+                var found = FindFileRecursive(root, new HashSet<string> { "whisper-cli", "main" });
+                if (found != null) return found;
+            }
+        }
+        catch {}
+
+        // Fallback: Extract from Embedded Resource
+        string? embeddedExtractionError = null;
+        try 
+        {
+            var embeddedPath = ExtractEmbeddedExecutable();
+            if (!string.IsNullOrEmpty(embeddedPath)) return embeddedPath;
+        }
+        catch (Exception ex)
+        {
+            embeddedExtractionError = ex.Message;
+            Console.WriteLine($"Failed to extract embedded whisper-cli: {ex.Message}");
+        }
+
+        // Diagnostic Logging
+        try
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine($"Error: Could not find whisper-cli executable.");
+            sb.AppendLine($"BaseDir: {baseDir}");
+            sb.AppendLine($"CurrentDir: {Directory.GetCurrentDirectory()}");
+            sb.AppendLine($"Extraction Error: {embeddedExtractionError ?? "None/Null result"}");
+            sb.AppendLine("Checked Locations:");
+            foreach (var c in candidates) sb.AppendLine($" - {c} (Exists: {File.Exists(c)})");
+            
+            sb.AppendLine("\nDirectory Listing (BaseDir):");
+            if (Directory.Exists(baseDir))
+            {
+                foreach (var f in Directory.GetFileSystemEntries(baseDir)) sb.AppendLine($" - {f}");
+            }
+
+            // Try multiple log paths
+            var logPaths = new List<string> 
+            {
+                Path.Combine(Path.GetTempPath(), "subtitle_guardian_error.log"),
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "SubtitleGuardian", "error.log"),
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "subtitle_guardian_error.log")
+            };
+
+            foreach (var lp in logPaths)
+            {
+                try 
+                {
+                    var d = Path.GetDirectoryName(lp);
+                    if (!Directory.Exists(d)) Directory.CreateDirectory(d!);
+                    File.WriteAllText(lp, sb.ToString());
+                } catch {}
+            }
+        }
+        catch {}
+
+        // Include critical info in the exception message
+        throw new FileNotFoundException($"[CRITICAL_ERROR: {embeddedExtractionError?.Split(':')[0] ?? "NotFound"}] Could not find whisper-cli executable.\n" +
+            $"Embedded Extraction: {embeddedExtractionError ?? "Returned null"}\n" +
+            $"Checked locations:\n{string.Join("\n", candidates)}\nBaseDir: {baseDir}");
+    }
+
+    private string? ExtractEmbeddedExecutable()
+    {
+        Stream? stream = null;
+        string? extractionError = null;
+        try 
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            var resourceName = "whisper-cli";
+            
+            stream = assembly.GetManifestResourceStream(resourceName);
+            
+            if (stream == null) 
+            {
+                var resources = assembly.GetManifestResourceNames();
+                resourceName = resources.FirstOrDefault(r => r.EndsWith("whisper-cli"));
+                if (resourceName != null) stream = assembly.GetManifestResourceStream(resourceName);
+            }
+
+            if (stream == null) 
+            {
+                throw new Exception($"ResNotFound: {string.Join(",", assembly.GetManifestResourceNames())}");
+            }
+
+            // Try multiple paths: 1. AppSupport, 2. Temp
+            var paths = new List<string>
+            {
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "SubtitleGuardian", "whisper-cli"),
+                Path.Combine(Path.GetTempPath(), "SubtitleGuardian", "whisper-cli")
+            };
+
+            foreach (var tempPath in paths)
+            {
+                try
+                {
+                    var dir = Path.GetDirectoryName(tempPath);
+                    if (!Directory.Exists(dir)) Directory.CreateDirectory(dir!);
+
+                    if (File.Exists(tempPath)) File.Delete(tempPath);
+                    
+                    using (var fileStream = File.Create(tempPath))
+                    {
+                        stream.Position = 0; // Reset stream if retrying
+                        stream.CopyTo(fileStream);
+                    }
+
+                    if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                    {
+                        // 1. chmod +x
+                        Process.Start("chmod", $"+x \"{tempPath}\"")?.WaitForExit();
+                        // 2. Remove quarantine
+                        Process.Start("xattr", $"-d com.apple.quarantine \"{tempPath}\"")?.WaitForExit();
+                        // 3. Ad-hoc sign
+                        Process.Start("codesign", $"--force --sign - \"{tempPath}\"")?.WaitForExit();
+                    }
+
+                    return tempPath;
+                }
+                catch (Exception ex)
+                {
+                    extractionError = ex.Message;
+                    // Continue to next path
+                }
+            }
+            
+            throw new Exception($"ExtractionFailed: {extractionError}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("ExtractEmbeddedExecutable Error: " + ex.ToString());
+            throw; 
+        }
+        finally
+        {
+            if (stream != null) stream.Dispose();
+        }
+    }
+
+    private string? FindFileRecursive(string dir, HashSet<string> targetNames)
+    {
+        try
+        {
+            foreach (var file in Directory.EnumerateFiles(dir))
+            {
+                if (targetNames.Contains(Path.GetFileName(file))) return file;
+            }
+
+            foreach (var subDir in Directory.EnumerateDirectories(dir))
+            {
+                // Skip system folders or obvious non-candidates to speed up
+                var name = Path.GetFileName(subDir);
+                if (name.StartsWith(".") || name == "_CodeSignature" || name == "Frameworks") continue;
+
+                var found = FindFileRecursive(subDir, targetNames);
+                if (found != null) return found;
+            }
+        }
+        catch { /* Ignore permission errors */ }
+        return null;
     }
 
     private string ResolveModelPath(TranscribeOptions options)
